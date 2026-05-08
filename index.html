@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Madsen Mill</title>
+  <meta name="description" content="Madsen Mill builds focused software for risk, workflow, and operational clarity.">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050505;
+      --ink: #f7f7f7;
+      --muted: #9c9c9c;
+      --line: rgba(255, 255, 255, 0.14);
+      --soft-line: rgba(255, 255, 255, 0.08);
+      --max: 1080px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-gutter: stable;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,0.028) 1px, transparent 1px),
+        #050505;
+      background-size: 72px 72px, 72px 72px, auto;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .shell {
+      width: min(var(--max), calc(100% - 42px));
+      margin: 0 auto;
+    }
+
+    .site-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      width: 100%;
+      height: 100%;
+      opacity: 0.86;
+    }
+
+    header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 10;
+      background: rgba(5, 5, 5, 0.68);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 68px;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .mark {
+      width: 36px;
+      height: 36px;
+      color: #fff;
+    }
+
+    .mark svg,
+    .hero-mark svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 650;
+    }
+
+    nav a:hover {
+      color: var(--ink);
+    }
+
+    .index-menu {
+      position: relative;
+    }
+
+    .index-trigger {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .index-trigger:hover,
+    .index-menu:focus-within .index-trigger,
+    .index-menu:hover .index-trigger {
+      color: var(--ink);
+    }
+
+    .index-panel {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      display: grid;
+      min-width: 190px;
+      padding: 14px 10px 10px;
+      background: rgba(5, 5, 5, 0.9);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 160ms ease, transform 160ms ease;
+      backdrop-filter: blur(18px);
+    }
+
+    .index-menu:hover .index-panel,
+    .index-menu:focus-within .index-panel {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .index-panel a {
+      padding: 10px 12px;
+      color: #cfcfcf;
+    }
+
+    .index-panel a:hover {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+    }
+
+    .hero {
+      display: grid;
+      min-height: 72vh;
+      align-items: end;
+      padding: 104px 0 48px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      color: #d8d8d8;
+      font-size: 0.78rem;
+      font-weight: 650;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 42px;
+      height: 1px;
+      background: #fff;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 780px;
+      font-size: clamp(2.8rem, 5.8vw, 5.7rem);
+      font-weight: 680;
+      line-height: 1;
+    }
+
+    .hero-mark {
+      width: clamp(64px, 8vw, 96px);
+      height: clamp(88px, 11vw, 132px);
+      margin-bottom: 30px;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .hero-text {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(260px, 0.5fr);
+      gap: 42px;
+      align-items: end;
+      margin-top: 28px;
+    }
+
+    .lead {
+      color: #d7d7d7;
+      font-size: clamp(1.06rem, 1.45vw, 1.28rem);
+      line-height: 1.58;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border: 1px solid rgba(255,255,255,0.34);
+      background: #fff;
+      color: #050505;
+      font-size: 0.92rem;
+      font-weight: 680;
+      transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      background: #dedede;
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.035);
+      color: var(--ink);
+    }
+
+    .button.secondary:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    section {
+      padding: 92px 0;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(260px, 0.5fr);
+      gap: 42px;
+      align-items: end;
+      margin-bottom: 44px;
+    }
+
+    .section-head.product-aligned {
+      grid-template-columns: 120px minmax(0, 0.9fr) minmax(260px, 0.7fr);
+      gap: 28px;
+    }
+
+    .section-head.product-aligned h2 {
+      grid-column: 1 / 3;
+    }
+
+    h2 {
+      font-size: clamp(1.9rem, 3.2vw, 3.4rem);
+      font-weight: 650;
+      line-height: 1.04;
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.62;
+      font-size: 1rem;
+    }
+
+    .product-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .product {
+      position: relative;
+      display: grid;
+      grid-template-columns: 120px minmax(0, 0.9fr) minmax(260px, 0.7fr);
+      gap: 28px;
+      align-items: baseline;
+      padding: 22px 0;
+    }
+
+    .product::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(90deg, rgba(255,255,255,0.09), transparent 48%);
+      opacity: 0;
+      transform: scaleX(0.96);
+      transform-origin: left;
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .product:hover::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    .num {
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 760;
+    }
+
+    .product h3 {
+      font-size: clamp(1.7rem, 3.3vw, 3.35rem);
+      font-weight: 650;
+      line-height: 1;
+    }
+
+    .product p {
+      max-width: 520px;
+      color: #c7c7c7;
+      font-size: clamp(0.98rem, 1.2vw, 1.12rem);
+      line-height: 1.58;
+    }
+
+    .service-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .service {
+      min-height: 154px;
+      padding: 24px;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .service strong {
+      display: block;
+      font-size: 0.96rem;
+    }
+
+    .service span {
+      display: block;
+      margin-top: 34px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .statement {
+      display: grid;
+      grid-template-columns: 120px minmax(0, 0.9fr) minmax(260px, 0.7fr);
+      gap: 28px;
+      align-items: end;
+    }
+
+    .statement h2 {
+      grid-column: 1 / 3;
+      max-width: 850px;
+    }
+
+    footer {
+      padding: 34px 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        display: none;
+      }
+
+      .hero-text,
+      .section-head,
+      .section-head.product-aligned,
+      .statement {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head.product-aligned h2 {
+        grid-column: auto;
+      }
+
+      .statement h2 {
+        grid-column: auto;
+      }
+
+      .product {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .service-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .shell {
+        width: min(100% - 28px, var(--max));
+      }
+
+      .hero {
+        min-height: 70vh;
+        padding-top: 96px;
+      }
+
+      h1 {
+        font-size: clamp(2.65rem, 13vw, 4.6rem);
+      }
+
+      section {
+        padding: 68px 0;
+      }
+
+      .actions,
+      .button {
+        width: 100%;
+      }
+
+      .service-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas class="site-canvas" id="field" aria-hidden="true"></canvas>
+
+  <header>
+    <div class="shell nav">
+      <a class="brand" href="#top" aria-label="Madsen Mill home">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 72 96" role="img">
+            <path d="M36 39 L26 8 L42 31 Z" fill="currentColor"/>
+            <path d="M40 36 L67 24 L48 47 Z" fill="currentColor"/>
+            <path d="M38 43 L55 73 L30 55 Z" fill="currentColor"/>
+            <path d="M32 43 L7 58 L24 34 Z" fill="currentColor"/>
+            <path d="M36 48 L36 90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="36" cy="40" r="5" fill="var(--bg)" stroke="currentColor" stroke-width="3"/>
+          </svg>
+        </span>
+        <span>Madsen Mill</span>
+      </a>
+      <nav aria-label="Primary">
+        <div class="index-menu">
+          <button class="index-trigger" type="button">Index</button>
+          <div class="index-panel" aria-label="Index pages">
+            <a href="index.html">Home</a>
+            <a href="pluto.html">PLUTO</a>
+            <a href="chainmail.html">Chainmail</a>
+            <a href="consulting.html">Consulting</a>
+            <a href="blog.html">Blog</a>
+          </div>
+        </div>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="shell">
+        <div class="hero-mark" aria-hidden="true">
+          <svg viewBox="0 0 72 96" role="img">
+            <path d="M36 39 L26 8 L42 31 Z" fill="currentColor"/>
+            <path d="M40 36 L67 24 L48 47 Z" fill="currentColor"/>
+            <path d="M38 43 L55 73 L30 55 Z" fill="currentColor"/>
+            <path d="M32 43 L7 58 L24 34 Z" fill="currentColor"/>
+            <path d="M36 48 L36 90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="36" cy="40" r="5" fill="var(--bg)" stroke="currentColor" stroke-width="3"/>
+          </svg>
+        </div>
+        <div class="eyebrow">madsenmill.com</div>
+        <h1>Systems for the work behind the work.</h1>
+        <div class="hero-text">
+          <p class="lead">Madsen Mill builds focused products and internal systems for risk, workflow, and operational clarity.</p>
+          <div class="actions">
+            <a class="button secondary" href="mailto:hello@madsenmill.com">Contact</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="shell">
+        <div class="section-head">
+          <h2>Products and practice</h2>
+          <p class="muted">A small studio building tools for decisions, handoffs, and accountability.</p>
+        </div>
+
+        <div class="product-list">
+          <article class="product">
+            <span class="num">01 / Cyber risk</span>
+            <h3>PLUTO</h3>
+            <p>Cyber risk decisions, treatment plans, and measurable progress.</p>
+          </article>
+
+          <article class="product">
+            <span class="num">02 / Workflow</span>
+            <h3>Chainmail</h3>
+            <p>Approvals, audit trails, and exception visibility.</p>
+          </article>
+
+          <article class="product">
+            <span class="num">03 / Advisory</span>
+            <h3>Consulting</h3>
+            <p>Designing and building useful systems around difficult workflows.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="shell">
+        <div class="section-head product-aligned">
+          <h2>Less fog around important work.</h2>
+          <p class="muted">We help teams replace scattered process with software that is easier to trust.</p>
+        </div>
+
+        <div class="service-strip">
+          <div class="service">
+            <strong>Strategy</strong>
+            <span>Product shape, priorities, operating models.</span>
+          </div>
+          <div class="service">
+            <strong>Automation</strong>
+            <span>Data, approvals, alerts, evidence.</span>
+          </div>
+          <div class="service">
+            <strong>Interfaces</strong>
+            <span>Quiet tools for focused teams.</span>
+          </div>
+          <div class="service">
+            <strong>Security</strong>
+            <span>Risk, controls, treatment, accountability.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="shell statement">
+        <h2>Bring shape to the work.</h2>
+        <div>
+          <p class="muted">Bring the messy workflow, the half-built tool, or the process that keeps slipping out of view.</p>
+          <div class="actions" style="margin-top: 26px;">
+            <a class="button" href="mailto:hello@madsenmill.com">hello@madsenmill.com</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-row">
+      <span>&copy; 2026 Madsen Mill</span>
+      <span>madsenmill.com</span>
+    </div>
+  </footer>
+  <script src="background.js"></script>
+</body>
+</html>
