@@ -36,7 +36,9 @@
     .detail { padding:0; }
     .detail strong { display:block; font-size:.95rem; }
     .detail p { margin:16px 0 0; color:var(--muted); line-height:1.56; }
-    .back { display:inline-flex; margin-top:84px; color:#d8d8d8; font-weight:650; }
+    .page-actions { display:flex; gap:18px; flex-wrap:wrap; align-items:center; margin-top:84px; }
+    .external { display:inline-flex; align-items:center; justify-content:center; min-height:46px; padding:0 18px; background:#fff; color:#050505; font-weight:700; }
+    .back { display:inline-flex; color:#d8d8d8; font-weight:650; }
     @media (max-width:900px) { nav{display:none;} .details{grid-template-columns:1fr;} main{padding-top:108px;} }
   </style>
 </head>
@@ -58,7 +60,10 @@
         <div class="detail"><strong>Choose treatment</strong><p>Connect decisions to objectives and accountable work.</p></div>
         <div class="detail"><strong>Show progress</strong><p>Keep a visible line from completed work to reduced risk.</p></div>
       </div>
-      <a class="back" href="index.html">Back to Madsen Mill</a>
+      <div class="page-actions">
+        <a class="external" href="https://plutorisk.com" target="_blank" rel="noopener">Visit plutorisk.com</a>
+        <a class="back" href="index.html">Back to Madsen Mill</a>
+      </div>
     </div>
   </main>
   <script src="background.js"></script>
